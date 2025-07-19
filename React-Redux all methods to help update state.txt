@@ -1,0 +1,60 @@
+In Redux (and React in general), you're often working with arrays and objects, especially when managing lists of items like todos. The methods you use aren't specific to Redux, but they’re standard JavaScript array/object methods used inside reducers and components to retrieve, update, or remove items. Here's a categorized list with explanations and when you'd typically use them:
+
+🔍 Array Lookup & Selection
+Method	Use Case
+.find()	Returns the first item that matches a condition.
+📌 Use to get a specific todo by ID.
+.findIndex()	Returns the index of the first item that matches.
+📌 Useful for updating/removing a todo using splice.
+.filter()	Returns a new array excluding (or including) certain items.
+📌 Use to remove a todo (state.todos = state.todos.filter(...))
+.some()	Returns true if any item matches a condition.
+📌 Use to check if a todo exists.
+.every()	Returns true if all items match a condition.
+📌 Can be used for validation logic.
+
+🔁 Iteration & Transformation
+Method	Use Case
+.map()	Returns a new array by transforming each element.
+📌 Use to update a specific todo while keeping others unchanged.
+.forEach()	Iterates over items, but doesn't return a new array.
+⚠️ Less commonly used in reducers; avoid mutating state.
+.reduce()	Reduces array to a single value (like a count or sum).
+📌 Use to count completed todos or total.
+.flatMap()	Map + Flatten combined.
+📌 Use if each todo might result in multiple items. Less common.
+
+🧠 Other Useful Methods
+Method	Use Case
+.includes()	Checks if a value exists in an array.
+📌 Use with tags, categories, or simple arrays.
+.slice()	Returns a shallow copy of a portion of an array.
+📌 Use to implement pagination or undo history.
+.splice()	Modifies array in-place (⚠️ avoid in reducers).
+📌 Okay if using libraries like immer.
+Object.assign()	Used to merge or copy objects.
+📌 Helpful when working with object-based state.
+{ ...spread }	JavaScript spread syntax to copy and update arrays or objects.
+📌 Preferred in Redux reducers for immutability.
+
+🧼 Reducer Best Practices in Redux Toolkit
+Always return new state (don’t mutate unless using createSlice with Immer).
+
+Prefer map and filter to avoid direct mutation.
+
+Use find or findIndex for specific updates.
+
+✅ Example Scenarios
+js
+Copy
+Edit
+// updateTodo in reducer
+state.todos = state.todos.map(todo =>
+  todo.id === action.payload.id ? { ...todo, text: action.payload.text } : todo
+);
+
+// removeTodo in reducer
+state.todos = state.todos.filter(todo => todo.id !== action.payload);
+
+// get single todo (inside component)
+const todo = todos.find(t => t.id === selectedId);
